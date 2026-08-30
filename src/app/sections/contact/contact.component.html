@@ -1,46 +1,59 @@
-<section class="section contact" id="contact">
-  <div class="shell">
-    <div class="section-head" [appReveal]="0">
-      <span class="idx">05</span>
-      <h2>Contact</h2>
-      <span class="rule"></span>
-    </div>
+<div class="contact">
+  <div class="pane9x">
+    <p class="intro">
+      I am open to senior fullstack roles and to interesting problems in
+      performance, architecture and legacy modernisation. The fastest way to
+      reach me is email.
+    </p>
 
-    <div class="panel" [appReveal]="60">
-      <h3>Let's build something</h3>
-      <p>
-        I am open to senior fullstack roles and to interesting problems in performance, architecture
-        and legacy modernisation. The fastest way to reach me is email.
-      </p>
+    <fieldset class="group9x form">
+      <legend>Contact details</legend>
 
-      <a class="mail" [href]="'mailto:' + profile.email">
-        <app-icon name="mail" [size]="18" />
-        {{ profile.email }}
+      <label class="row">
+        <span class="label">Email:</span>
+        <span class="field9x">{{ profile.email }}</span>
+      </label>
+
+      <label class="row">
+        <span class="label">GitHub:</span>
+        <span class="field9x">{{ profile.githubUser }}</span>
+      </label>
+
+      <label class="row">
+        <span class="label">LinkedIn:</span>
+        <span class="field9x">{{ profile.linkedinUser }}</span>
+      </label>
+
+      <label class="row">
+        <span class="label">Location:</span>
+        <span class="field9x">{{ profile.location }}</span>
+      </label>
+    </fieldset>
+
+    <div class="buttons">
+      <a
+        class="btn9x"
+        [href]="profile.github"
+        target="_blank"
+        rel="noreferrer noopener"
+      >
+        <app-icon name="github" [size]="14" />
+        GitHub
       </a>
-
-      <ul class="channels">
-        <li>
-          <a [href]="profile.github" target="_blank" rel="noreferrer noopener">
-            <app-icon name="github" [size]="18" />
-            <span class="label">GitHub</span>
-            <span class="handle">{{ profile.githubUser }}</span>
-          </a>
-        </li>
-        <li>
-          <a [href]="profile.linkedin" target="_blank" rel="noreferrer noopener">
-            <app-icon name="linkedin" [size]="18" />
-            <span class="label">LinkedIn</span>
-            <span class="handle">{{ profile.linkedinUser }}</span>
-          </a>
-        </li>
-      </ul>
+      <a
+        class="btn9x"
+        [href]="profile.linkedin"
+        target="_blank"
+        rel="noreferrer noopener"
+      >
+        <app-icon name="linkedin" [size]="14" />
+        LinkedIn
+      </a>
     </div>
   </div>
-</section>
 
-<footer class="foot">
-  <div class="shell inner">
-    <span>© {{ year }} {{ profile.name }}</span>
-    <span class="built">Built with Angular</span>
+  <div class="statusbar">
+    <span class="grow">© {{ year }} {{ profile.name }}</span>
+    <span>Built with Angular</span>
   </div>
-</footer>
+</div>

@@ -75,6 +75,10 @@ export const JOBS: Job[] = [
         label: 'Fullstack Development',
         text: 'Building the Workflow feature — a graph-based system that manages the entire document lifecycle, from creation through signature to archival.',
       },
+      {
+        label: 'AI MCP',
+        text: 'Building MCP infra to create an AI assistant.',
+      },
     ],
     stack: ['Fullstack', 'Graph systems', 'Document lifecycle'],
   },
@@ -170,6 +174,7 @@ export const PROJECTS: Project[] = [
     language: 'Go',
     stack: ['Go', 'WebAssembly', 'JavaScript'],
     repo: 'https://github.com/Matheus-Cezario/dataGenerate',
+    learnMore: 'https://matheus-cezario.github.io/dataGenerate/',
   },
   {
     name: 'Bla Bla Bla In English',

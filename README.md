@@ -1,7 +1,8 @@
 # Portfolio — Matheus Cezário
 
-Personal portfolio site, built with Angular 19 (standalone components, zoneless-ready
-signals, no router — it is a single scrolling page).
+Personal portfolio site, built with Angular 19 (standalone components, signal-based
+state, no router). The site is a Windows 9x/2000-style desktop: each part of the CV
+opens as a window that can be dragged, minimised, maximised, resized and closed.
 
 ## Running
 
@@ -32,16 +33,16 @@ To add a project, push a new object onto `PROJECTS`:
   repo: 'https://github.com/...',        // optional — omit for closed-source work
   demo: 'https://live-demo',             // optional — renders a "Live demo" link
   learnMore: 'https://docs-or-video',    // optional — renders a "Learn more" button
-  featured: true,                        // optional — adds the accent glow
+  featured: true,                        // optional — shows the floppy icon in the list
 }
 ```
 
-Every link is optional, so a project whose code stays private still gets a card:
+Every link is optional, so a project whose code stays private still gets a row:
 
-- no `repo` — the GitHub icon and title link disappear, and the footer notes
-  _private source_ next to the language;
-- `learnMore` — a pill button pointing at docs, a write-up or a recorded demo. It
-  takes precedence over `demo` in the footer, so set only one of the two.
+- no `repo` — the details pane shows a disabled _Private source_ button instead of the
+  source-code link;
+- `learnMore` — a button pointing at docs, a write-up or a recorded demo, shown next to
+  the source and demo links.
 
 New languages need an entry in `LANGUAGE_COLORS` at the bottom of the same file,
 otherwise the dot falls back to grey.
@@ -50,27 +51,45 @@ otherwise the dot falls back to grey.
 
 ```
 src/
-  styles.scss                 design tokens + shared layout helpers (.shell, .section, .chip)
+  styles.scss                 palette + 3D bevel helpers (.raised, .sunken, .btn9x, .pane9x)
   app/
     data/portfolio.ts         all content
     shared/
-      icon.component.ts       inline SVG icon set
-      reveal.directive.ts     [appReveal] fade-in on scroll, with optional stagger in ms
+      icon.component.ts       inline SVG icon set (links)
+      pixel-icon.component.ts 32x32 blocky icons in the 16-colour palette
+    desktop/
+      window-manager.service.ts  open/close/focus/minimise/maximise, z-order, geometry
+      win-frame.component.*      window chrome: title bar, menu bar, drag and resize
+      desktop.component.*        wallpaper, desktop icons, mounted windows
+      taskbar.component.*        Start button and menu, task buttons, tray clock
     sections/
-      nav/                    sticky header, scroll spy, mobile menu
-      hero/                   name, tagline, CTAs, stats
+      welcome/                Welcome.txt — intro, stats, shortcut buttons
       about/                  summary + education panel
-      experience/             timeline
-      projects/               GitHub project grid
-      skills/                 grouped skill chips
-      contact/                contact panel + footer
+      experience/             job history as grouped panels
+      projects/               Explorer-style list with a details pane
+      skills/                 grouped skill boxes
+      contact/                contact fields + links
 ```
+
+### Adding a window
+
+1. Add an id to `WindowId` and an entry to `WINDOW_DEFS` in `window-manager.service.ts`
+   (title, icon, default size).
+2. Build the content component — give its `:host` `display: flex; flex-direction: column;
+   flex: 1; min-height: 0` and put the body in a single `.pane9x` scroller.
+3. Render it under a new `@case` in `desktop.component.html` and, if it should sit on the
+   wallpaper, add it to `icons` in `desktop.component.ts`.
+
+Keep **one** scrolling container per window. Nested `overflow: auto` boxes whose widths
+depend on each other can make Chrome loop on layout and hang the tab; `.pane9x` sets
+`scrollbar-gutter: stable` for the same reason.
 
 ## Theming
 
-Colours, radii and fonts are CSS custom properties on `:root` in `src/styles.scss`.
-The palette is dark-only by design; swapping `--accent` and `--accent-2` re-skins the
-whole page.
+The classic palette lives as CSS custom properties on `:root` in `src/styles.scss`:
+`--face`, `--face-light`, `--shadow` and `--dark` build every bevel, `--title-a1`/`--title-a2`
+paint the active title bar, and `--desktop` is the wallpaper. Everything is square by
+design — no radii, no transitions.
 
 ## Deploying
 
@@ -87,4 +106,5 @@ For GitHub Pages, build with the repo name as the base href:
 npx ng build --base-href /portfolio/
 ```
 
-The résumé PDF is served from `public/matheus-cezario-resume.pdf` and linked from the hero.
+The résumé PDF is served from `public/matheus-cezario-resume.pdf` and linked from the
+Start menu and the Welcome window.

@@ -1,85 +1,91 @@
-<section class="section" id="projects">
-  <div class="shell">
-    <div class="section-head" [appReveal]="0">
-      <span class="idx">03</span>
-      <h2>Projects</h2>
-      <span class="rule"></span>
-      <a class="all" [href]="profile.github" target="_blank" rel="noreferrer noopener">
-        <app-icon name="github" [size]="15" />
-        All repositories
-      </a>
+<div class="projects">
+  <div class="toolbar">
+    <a
+      class="btn9x"
+      [href]="profile.github"
+      target="_blank"
+      rel="noreferrer noopener"
+    >
+      All repositories
+    </a>
+    <span class="path">C:\portfolio\projects</span>
+  </div>
+
+  <div class="listing sunken">
+    <div class="head-row">
+      <span class="col-name">Name</span>
+      <span class="col-lang">Language</span>
+      <span class="col-stack">Stack</span>
     </div>
 
-    <div class="grid">
-      @for (project of projects; track project.name; let i = $index) {
-        <article class="card" [class.featured]="project.featured" [appReveal]="(i % 3) * 70">
-          <div class="top">
-            <app-icon name="code" [size]="20" />
-            <div class="links">
-              @if (project.demo) {
-                <a
-                  [href]="project.demo"
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  [attr.aria-label]="project.name + ' live demo'"
-                >
-                  <app-icon name="external" [size]="17" />
-                </a>
-              }
-              @if (project.repo) {
-                <a
-                  [href]="project.repo"
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  [attr.aria-label]="project.name + ' on GitHub'"
-                >
-                  <app-icon name="github" [size]="17" />
-                </a>
-              }
-            </div>
-          </div>
-
-          <h3>
-            @if (project.repo) {
-              <a [href]="project.repo" target="_blank" rel="noreferrer noopener">{{
-                project.name
-              }}</a>
-            } @else {
+    <ul class="rows">
+      @for (project of projects; track project.name) {
+        <li (dblclick)="onDoubleClick(project.repo)">
+          <button
+            type="button"
+            class="row"
+            [class.is-selected]="selected().name === project.name"
+            (click)="select(project)"
+          >
+            <span class="col-name">
+              <app-pixel-icon
+                [name]="project.featured ? 'floppy' : 'notepad'"
+                [size]="16"
+              />
               {{ project.name }}
-            }
-          </h3>
-
-          <p class="blurb">{{ project.blurb }}</p>
-
-          <ul class="stack">
-            @for (tech of project.stack; track tech) {
-              <li>{{ tech }}</li>
-            }
-          </ul>
-
-          <footer>
-            <span class="lang">
-              <span class="bullet" [style.background]="colorFor(project)"></span>
-              {{ project.language }}
-              @if (!project.repo) {
-                <span class="closed" title="Source code not public">· private source</span>
-              }
             </span>
-
-            @if (project.learnMore) {
-              <a class="more" [href]="project.learnMore" target="_blank" rel="noreferrer noopener">
-                Learn more
-                <app-icon name="arrow" [size]="13" />
-              </a>
-            } @else if (project.demo) {
-              <a class="demo" [href]="project.demo" target="_blank" rel="noreferrer noopener">
-                Live demo
-                <app-icon name="arrow" [size]="13" />
-              </a>
-            }
-          </footer>
-        </article>
+            <span class="col-lang">
+              <i class="dot" [style.background]="colorFor(project)"></i>
+              {{ project.language }}
+            </span>
+            <span class="col-stack">{{ project.stack.join(", ") }}</span>
+          </button>
+        </li>
       }
+    </ul>
+  </div>
+
+  <div class="details">
+    <div class="pane9x">
+      <h3>{{ selected().name }}</h3>
+      <p class="blurb">{{ selected().blurb }}</p>
+
+      <div class="links">
+        @if (selected().repo; as repo) {
+          <a
+            class="btn9x"
+            [href]="repo"
+            target="_blank"
+            rel="noreferrer noopener"
+            >Source code</a
+          >
+        } @else {
+          <button type="button" class="btn9x" disabled>Private source</button>
+        }
+        @if (selected().demo; as demo) {
+          <a
+            class="btn9x"
+            [href]="demo"
+            target="_blank"
+            rel="noreferrer noopener"
+            >Demo</a
+          >
+        }
+        @if (selected().learnMore; as more) {
+          <a
+            class="btn9x"
+            [href]="more"
+            target="_blank"
+            rel="noreferrer noopener"
+            >Learn more</a
+          >
+        }
+      </div>
     </div>
   </div>
-</section>
+
+  <div class="statusbar">
+    <span class="grow">{{ projects.length }} objects</span>
+    <span>{{ selected().name }}</span>
+  </div>
+</div>

@@ -1,0 +1,55 @@
+<div class="welcome">
+  <div class="pane9x paper">
+    <div class="banner">
+      <span class="name">{{ profile.name }}</span>
+      <span class="version">Portfolio v2000</span>
+    </div>
+
+    <p class="line"><strong>Role:</strong> {{ profile.role }}</p>
+    <p class="line"><strong>Location:</strong> {{ profile.location }}</p>
+    <p class="line"><strong>Email:</strong> {{ profile.email }}</p>
+
+    <p class="tagline">{{ profile.tagline }}</p>
+
+    <div class="divider9x"></div>
+
+    <p class="line">
+      Double-click the icons on the desktop — or use the Start menu — to open
+      the windows with experience, projects, skills and contact. Every window
+      can be dragged by its title bar, minimised, maximised and closed.
+    </p>
+
+    <div class="divider9x"></div>
+
+    <ul class="stats">
+      @for (stat of stats; track stat.label) {
+        <li>
+          <span class="value">{{ stat.value }}</span>
+          <span class="label">{{ stat.label }}</span>
+        </li>
+      }
+    </ul>
+  </div>
+
+  <div class="actions">
+    <button type="button" class="btn9x" (click)="open('projects')">
+      View projects
+    </button>
+    <button type="button" class="btn9x" (click)="open('experience')">
+      Experience
+    </button>
+    <a
+      class="btn9x"
+      href="matheus-cezario-resume.pdf"
+      target="_blank"
+      rel="noreferrer"
+    >
+      Résumé
+    </a>
+  </div>
+
+  <div class="statusbar">
+    <span class="grow">Ready</span>
+    <span>Ln 1, Col 1</span>
+  </div>
+</div>

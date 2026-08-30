@@ -1,0 +1,215 @@
+:host {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  min-width: 280px;
+  min-height: 180px;
+  padding: 3px;
+  background: var(--face);
+  box-shadow:
+    inset -1px -1px 0 0 var(--dark),
+    inset 1px 1px 0 0 var(--white),
+    inset -2px -2px 0 0 var(--shadow),
+    inset 2px 2px 0 0 var(--face-light);
+}
+
+/* `display: flex` above would otherwise defeat the [hidden] attribute. */
+:host([hidden]) {
+  display: none;
+}
+
+:host(.is-maximized) {
+  width: 100%;
+  height: 100%;
+}
+
+:host(.is-dragging) {
+  user-select: none;
+}
+
+/* ---------- title bar ---------- */
+
+.titlebar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 0 0 auto;
+  height: 20px;
+  padding: 0 2px 0 3px;
+  background: linear-gradient(90deg, var(--title-i1), var(--title-i2));
+  color: #dfdfdf;
+  cursor: default;
+  touch-action: none;
+}
+
+:host(.is-active) .titlebar {
+  background: linear-gradient(90deg, var(--title-a1), var(--title-a2));
+  color: #fff;
+}
+
+.title {
+  flex: 1;
+  min-width: 0;
+  font-size: 11px;
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.controls {
+  display: flex;
+  gap: 2px;
+  flex: 0 0 auto;
+}
+
+.tb-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 17px;
+  height: 15px;
+  padding: 0;
+  border: 0;
+  background: var(--face);
+  cursor: default;
+  box-shadow:
+    inset -1px -1px 0 0 var(--dark),
+    inset 1px 1px 0 0 var(--white),
+    inset -2px -2px 0 0 var(--shadow),
+    inset 2px 2px 0 0 var(--face-light);
+}
+
+.tb-btn:active {
+  box-shadow:
+    inset -1px -1px 0 0 var(--white),
+    inset 1px 1px 0 0 var(--shadow),
+    inset -2px -2px 0 0 var(--face-light),
+    inset 2px 2px 0 0 var(--dark);
+}
+
+.tb-btn .glyph {
+  display: block;
+  position: relative;
+}
+
+.glyph.min {
+  width: 6px;
+  height: 2px;
+  margin-top: 5px;
+  background: #000;
+}
+
+.glyph.max {
+  width: 9px;
+  height: 8px;
+  border: 1px solid #000;
+  border-top-width: 2px;
+}
+
+.glyph.restore {
+  width: 9px;
+  height: 8px;
+}
+
+.glyph.restore::before,
+.glyph.restore::after {
+  content: '';
+  position: absolute;
+  border: 1px solid #000;
+  border-top-width: 2px;
+}
+
+.glyph.restore::before {
+  top: 0;
+  left: 3px;
+  width: 6px;
+  height: 5px;
+}
+
+.glyph.restore::after {
+  bottom: 0;
+  left: 0;
+  width: 6px;
+  height: 5px;
+  background: var(--face);
+}
+
+.glyph.close {
+  width: 8px;
+  height: 8px;
+}
+
+.glyph.close::before,
+.glyph.close::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: -1px;
+  width: 10px;
+  height: 2px;
+  background: #000;
+}
+
+.glyph.close::before {
+  transform: rotate(45deg);
+}
+
+.glyph.close::after {
+  transform: rotate(-45deg);
+}
+
+/* ---------- menu bar ---------- */
+
+.menubar {
+  display: flex;
+  gap: 2px;
+  flex: 0 0 auto;
+  padding: 2px 1px;
+  font-size: 11px;
+}
+
+.menu-item {
+  padding: 1px 6px;
+  cursor: default;
+}
+
+.menu-item:hover {
+  background: var(--sel);
+  color: var(--sel-text);
+}
+
+/* ---------- body ---------- */
+
+.body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  padding: 2px;
+}
+
+/* ---------- resize grip ---------- */
+
+.grip {
+  position: absolute;
+  right: 2px;
+  bottom: 2px;
+  width: 16px;
+  height: 16px;
+  cursor: nwse-resize;
+  touch-action: none;
+  background: repeating-linear-gradient(
+    135deg,
+    transparent 0 2px,
+    var(--white) 2px 3px,
+    var(--shadow) 3px 5px
+  );
+  clip-path: polygon(100% 0, 100% 100%, 0 100%);
+}
+
+@media (max-width: 760px) {
+  .menubar {
+    display: none;
+  }
+}

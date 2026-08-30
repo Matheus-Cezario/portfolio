@@ -1,38 +1,35 @@
-<section class="section" id="about">
-  <div class="shell">
-    <div class="section-head" [appReveal]="0">
-      <span class="idx">01</span>
-      <h2>About</h2>
-      <span class="rule"></span>
-    </div>
-
+<div class="about">
+  <div class="scroll">
     <div class="cols">
-      <div class="prose" [appReveal]="60">
+      <div class="prose">
+        <h2 class="head">About</h2>
         @for (paragraph of profile.summary; track $index) {
-          <p>{{ paragraph }}</p>
+          <p class="para">{{ paragraph }}</p>
         }
-        <p class="note">
-          I also spent time on a university extension project researching natural language processing
-          with Python and TensorFlow — the same curiosity that later turned into
+        <p class="para">
+          I also spent time on a university extension project researching natural language
+          processing with Python and TensorFlow — the same curiosity that later turned into
           <strong>AutorIA</strong>, a writing assistant for students.
         </p>
       </div>
 
-      <aside class="edu" [appReveal]="140">
-        <h3>Education &amp; certifications</h3>
-        <ul>
+      <fieldset class="group9x edu">
+        <legend>Education &amp; certifications</legend>
+        <ul class="list">
           @for (course of courses; track course.title) {
             <li>
-              <div class="row">
-                <span class="title">{{ course.title }}</span>
-                <span class="period">{{ course.period }}</span>
-              </div>
+              <span class="title">{{ course.title }}</span>
               <span class="issuer">{{ course.issuer }}</span>
-              <span class="detail">{{ course.detail }}</span>
+              <span class="meta">{{ course.detail }} · {{ course.period }}</span>
             </li>
           }
         </ul>
-      </aside>
+      </fieldset>
     </div>
   </div>
-</section>
+
+  <div class="statusbar">
+    <span class="grow">{{ profile.role }} · {{ profile.location }}</span>
+    <span>{{ courses.length }} items</span>
+  </div>
+</div>

@@ -1,0 +1,82 @@
+<div class="bar">
+  <button
+    type="button"
+    class="start-btn"
+    [class.is-on]="startOpen()"
+    [attr.aria-expanded]="startOpen()"
+    (click)="toggleStart()"
+  >
+    <span class="flag" aria-hidden="true">
+      <i class="q red"></i><i class="q green"></i><i class="q blue"></i><i class="q yellow"></i>
+    </span>
+    Start
+  </button>
+
+  <div class="sep" aria-hidden="true"></div>
+
+  <div class="tasks">
+    @for (win of wm.taskbarItems(); track win.id) {
+      <button
+        type="button"
+        class="task"
+        [class.is-active]="wm.activeId() === win.id && !win.minimized()"
+        (click)="wm.toggleFromTaskbar(win.id)"
+      >
+        <app-pixel-icon [name]="win.icon" [size]="16" />
+        <span>{{ win.title }}</span>
+      </button>
+    }
+  </div>
+
+  <div class="tray">
+    <app-pixel-icon name="globe" [size]="16" />
+    <span class="clock">{{ clock() }}</span>
+  </div>
+</div>
+
+@if (startOpen()) {
+  <div class="start-menu" role="menu">
+    <div class="spine"><span>Portfolio 2000</span></div>
+
+    <ul class="entries">
+      @for (program of programs; track program.id) {
+        <li>
+          <button type="button" role="menuitem" (click)="launch(program.id)">
+            <app-pixel-icon [name]="program.icon" [size]="24" />
+            <span>{{ program.title }}</span>
+          </button>
+        </li>
+      }
+
+      <li class="rule" aria-hidden="true"></li>
+
+      <li>
+        <a role="menuitem" href="matheus-cezario-resume.pdf" target="_blank" rel="noreferrer">
+          <app-pixel-icon name="floppy" [size]="24" />
+          <span>Résumé (PDF)</span>
+        </a>
+      </li>
+      <li>
+        <a role="menuitem" [href]="profile.github" target="_blank" rel="noreferrer noopener">
+          <app-pixel-icon name="globe" [size]="24" />
+          <span>GitHub</span>
+        </a>
+      </li>
+      <li>
+        <a role="menuitem" [href]="profile.linkedin" target="_blank" rel="noreferrer noopener">
+          <app-pixel-icon name="globe" [size]="24" />
+          <span>LinkedIn</span>
+        </a>
+      </li>
+
+      <li class="rule" aria-hidden="true"></li>
+
+      <li>
+        <button type="button" role="menuitem" (click)="shutDown()">
+          <app-pixel-icon name="computer" [size]="24" />
+          <span>Close all windows</span>
+        </button>
+      </li>
+    </ul>
+  </div>
+}

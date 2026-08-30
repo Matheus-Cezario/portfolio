@@ -1,0 +1,49 @@
+<div
+  class="titlebar"
+  (pointerdown)="startDrag($event)"
+  (dblclick)="wm.toggleMaximize(win.id)"
+>
+  <app-pixel-icon [name]="win.icon" [size]="16" />
+  <span class="title">{{ win.title }}</span>
+
+  <div class="controls" (pointerdown)="$event.stopPropagation()">
+    <button
+      type="button"
+      class="tb-btn"
+      aria-label="Minimize"
+      (click)="wm.minimize(win.id)"
+    >
+      <span class="glyph min"></span>
+    </button>
+    <button
+      type="button"
+      class="tb-btn"
+      [attr.aria-label]="win.maximized() ? 'Restore' : 'Maximize'"
+      (click)="wm.toggleMaximize(win.id)"
+    >
+      <span class="glyph" [class.max]="!win.maximized()" [class.restore]="win.maximized()"></span>
+    </button>
+    <button
+      type="button"
+      class="tb-btn close"
+      aria-label="Close"
+      (click)="wm.close(win.id)"
+    >
+      <span class="glyph close"></span>
+    </button>
+  </div>
+</div>
+
+<div class="menubar">
+  @for (menu of menus; track menu) {
+    <span class="menu-item">{{ menu }}</span>
+  }
+</div>
+
+<div class="body">
+  <ng-content />
+</div>
+
+@if (!win.maximized()) {
+  <div class="grip" (pointerdown)="startResize($event)" aria-hidden="true"></div>
+}

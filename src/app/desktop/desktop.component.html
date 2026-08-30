@@ -1,0 +1,46 @@
+<div class="desktop" (pointerdown)="clearSelection($event)">
+  <ul class="icons">
+    @for (icon of icons; track icon.id) {
+      <li>
+        <button
+          type="button"
+          class="icon"
+          [class.is-selected]="selected() === icon.id"
+          (click)="onIconClick(icon.id)"
+          (dblclick)="onIconOpen(icon.id)"
+          (keydown.enter)="onIconOpen(icon.id)"
+        >
+          <app-pixel-icon [name]="iconFor(icon.id)" [size]="32" />
+          <span class="label">{{ icon.label }}</span>
+        </button>
+      </li>
+    }
+  </ul>
+
+  @for (win of wm.windows(); track win.id) {
+    <app-win-frame [win]="win">
+      @switch (win.id) {
+        @case ('welcome') {
+          <app-welcome />
+        }
+        @case ('about') {
+          <app-about />
+        }
+        @case ('experience') {
+          <app-experience />
+        }
+        @case ('projects') {
+          <app-projects />
+        }
+        @case ('skills') {
+          <app-skills />
+        }
+        @case ('contact') {
+          <app-contact />
+        }
+      }
+    </app-win-frame>
+  }
+</div>
+
+<app-taskbar />

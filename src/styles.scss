@@ -1,64 +1,62 @@
 /* ============================================================
-   Global theme — dark, near-black, with a mint/blue accent pair
+   Global theme — Windows 9x / 2000 desktop
+   Grey bevels, Tahoma, no rounded corners, no easing.
    ============================================================ */
 
 :root {
-  --bg: #07090d;
-  --bg-elev: #0d1016;
-  --surface: #11151d;
-  --surface-hover: #161b25;
-  --border: #1f2530;
-  --border-strong: #2c3442;
+  /* Classic 3D object palette */
+  --face: #c0c0c0;
+  --face-light: #dfdfdf;
+  --white: #ffffff;
+  --shadow: #808080;
+  --dark: #0a0a0a;
 
-  --text: #e7ebf2;
-  --text-dim: #9aa4b8;
-  --text-faint: #6b7488;
+  /* Title bars */
+  --title-a1: #000080;
+  --title-a2: #1084d0;
+  --title-i1: #808080;
+  --title-i2: #b5b5b5;
 
-  --accent: #4de0b1;
-  --accent-soft: rgba(77, 224, 177, 0.12);
-  --accent-2: #7aa2f7;
-  --accent-2-soft: rgba(122, 162, 247, 0.12);
+  --desktop: #3a6ea5;
+  --desktop-2: #245edb;
 
-  --radius: 14px;
-  --radius-sm: 8px;
-  --maxw: 1080px;
+  --text: #000000;
+  --text-dim: #404040;
+  --disabled: #808080;
+  --disabled-hi: #ffffff;
 
-  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, 'Cascadia Code', monospace;
+  --sel: #000080;
+  --sel-text: #ffffff;
 
-  color-scheme: dark;
+  --field: #ffffff;
+
+  --font: Tahoma, 'MS Sans Serif', Geneva, Verdana, sans-serif;
+  --font-mono: 'Courier New', 'Lucida Console', monospace;
+
+  --taskbar-h: 30px;
+
+  color-scheme: light;
 }
 
 * {
   box-sizing: border-box;
 }
 
-html {
-  scroll-behavior: smooth;
-  scroll-padding-top: 90px;
+html,
+body {
+  height: 100%;
 }
 
 body {
   margin: 0;
-  background: var(--bg);
+  overflow: hidden;
+  background: #3a6ea5;
   color: var(--text);
-  font-family: var(--font-sans);
-  font-size: 16px;
-  line-height: 1.65;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-}
-
-/* Ambient glow behind the whole page */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  background:
-    radial-gradient(760px 460px at 12% -6%, rgba(77, 224, 177, 0.09), transparent 65%),
-    radial-gradient(680px 420px at 88% 4%, rgba(122, 162, 247, 0.08), transparent 62%);
+  font-family: var(--font);
+  font-size: 12px;
+  line-height: 1.45;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: unset;
 }
 
 h1,
@@ -66,9 +64,9 @@ h2,
 h3,
 h4 {
   margin: 0;
-  line-height: 1.2;
-  font-weight: 650;
-  letter-spacing: -0.02em;
+  font-size: 1em;
+  font-weight: bold;
+  line-height: 1.3;
 }
 
 p {
@@ -76,8 +74,12 @@ p {
 }
 
 a {
-  color: inherit;
-  text-decoration: none;
+  color: #000080;
+  text-decoration: underline;
+}
+
+a:hover {
+  color: #1084d0;
 }
 
 ul,
@@ -88,123 +90,202 @@ ol {
 }
 
 ::selection {
-  background: var(--accent-soft);
-  color: var(--accent);
+  background: var(--sel);
+  color: var(--sel-text);
 }
 
-/* ---------- shared layout helpers ---------- */
+img {
+  max-width: 100%;
+}
 
-.shell {
-  width: 100%;
-  max-width: var(--maxw);
-  margin: 0 auto;
-  padding: 0 28px;
+/* ---------- 3D bevel helpers ---------- */
+
+.raised {
+  background: var(--face);
+  box-shadow:
+    inset -1px -1px 0 0 var(--dark),
+    inset 1px 1px 0 0 var(--white),
+    inset -2px -2px 0 0 var(--shadow),
+    inset 2px 2px 0 0 var(--face-light);
+}
+
+.sunken {
+  background: var(--field);
+  box-shadow:
+    inset -1px -1px 0 0 var(--white),
+    inset 1px 1px 0 0 var(--shadow),
+    inset -2px -2px 0 0 var(--face-light),
+    inset 2px 2px 0 0 var(--dark);
+}
+
+.sunken-thin {
+  box-shadow:
+    inset -1px -1px 0 0 var(--white),
+    inset 1px 1px 0 0 var(--shadow);
+}
+
+/* ---------- buttons ---------- */
+
+.btn9x {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 75px;
+  min-height: 23px;
+  padding: 3px 12px;
+  border: 0;
+  background: var(--face);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 11px;
+  line-height: 1;
+  text-decoration: none;
+  cursor: default;
+  box-shadow:
+    inset -1px -1px 0 0 var(--dark),
+    inset 1px 1px 0 0 var(--white),
+    inset -2px -2px 0 0 var(--shadow),
+    inset 2px 2px 0 0 var(--face-light);
+}
+
+.btn9x:hover {
+  color: var(--text);
+}
+
+.btn9x:active,
+.btn9x.is-on {
+  padding: 4px 11px 2px 13px;
+  box-shadow:
+    inset -1px -1px 0 0 var(--white),
+    inset 1px 1px 0 0 var(--shadow),
+    inset -2px -2px 0 0 var(--face-light),
+    inset 2px 2px 0 0 var(--dark);
+}
+
+.btn9x:focus-visible {
+  outline: 1px dotted #000;
+  outline-offset: -4px;
+}
+
+.btn9x[disabled] {
+  color: var(--shadow);
+  text-shadow: 1px 1px 0 var(--white);
+}
+
+/* ---------- fields, boxes, bars ---------- */
+
+.field9x {
+  padding: 3px 5px;
+  background: var(--field);
+  font-family: var(--font);
+  font-size: 11px;
+  box-shadow:
+    inset -1px -1px 0 0 var(--white),
+    inset 1px 1px 0 0 var(--shadow),
+    inset -2px -2px 0 0 var(--face-light),
+    inset 2px 2px 0 0 var(--dark);
+}
+
+.group9x {
+  margin: 0;
+  padding: 32px 12px 14px;
+  border: 0;
+  box-shadow:
+    inset -1px -1px 0 0 var(--white),
+    inset 1px 1px 0 0 var(--shadow);
+
   position: relative;
-  z-index: 1;
+  legend {
+    position: absolute;
+    top: 7px;
+  }
 }
 
-.section {
-  padding: 104px 0;
-  position: relative;
-  z-index: 1;
-}
 
-.section-head {
+
+.statusbar {
   display: flex;
-  align-items: baseline;
-  gap: 16px;
-  margin-bottom: 44px;
+  gap: 2px;
+  flex: 0 0 auto;
+  padding: 2px;
+  background: var(--face);
+  font-size: 11px;
 }
 
-.section-head .idx {
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  color: var(--accent);
-  letter-spacing: 0.06em;
-}
-
-.section-head h2 {
-  font-size: clamp(1.6rem, 3.4vw, 2.15rem);
+.statusbar > span {
+  padding: 2px 6px;
+  box-shadow:
+    inset -1px -1px 0 0 var(--white),
+    inset 1px 1px 0 0 var(--shadow);
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.section-head .rule {
+.statusbar > span.grow {
   flex: 1;
-  height: 1px;
-  background: linear-gradient(90deg, var(--border-strong), transparent);
 }
 
-.chip {
-  display: inline-block;
-  padding: 4px 10px;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.02);
-  color: var(--text-dim);
+.divider9x {
+  height: 2px;
+  margin: 10px 0;
+  box-shadow:
+    inset 0 1px 0 0 var(--shadow),
+    inset 0 -1px 0 0 var(--white);
+}
+
+/* Content pane inside a window: white paper on a grey frame */
+.pane9x {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  /* Reserving the gutter keeps content width stable when the scrollbar
+     appears — nested auto-scrollers otherwise oscillate. */
+  scrollbar-gutter: stable;
+  padding: 12px 14px;
+  background: var(--field);
+  box-shadow:
+    inset -1px -1px 0 0 var(--white),
+    inset 1px 1px 0 0 var(--shadow),
+    inset -2px -2px 0 0 var(--face-light),
+    inset 2px 2px 0 0 var(--dark);
+}
+
+.mono9x {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.02em;
-  white-space: nowrap;
 }
 
-/* ---------- scroll reveal ---------- */
-
-.reveal {
-  opacity: 0;
-  transform: translateY(18px);
-  transition:
-    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.reveal.is-visible {
-  opacity: 1;
-  transform: none;
-}
-
-/* ---------- scrollbar ---------- */
+/* ---------- scrollbars (chrome/edge) ---------- */
 
 ::-webkit-scrollbar {
-  width: 11px;
+  width: 16px;
+  height: 16px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg);
+  background-color: #dfdfdf;
+  background-image: linear-gradient(45deg, #fff 25%, transparent 25%, transparent 75%, #fff 75%),
+    linear-gradient(45deg, #fff 25%, transparent 25%, transparent 75%, #fff 75%);
+  background-size: 2px 2px;
+  background-position: 0 0, 1px 1px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--border-strong);
-  border-radius: 99px;
-  border: 3px solid var(--bg);
+  background: var(--face);
+  box-shadow:
+    inset -1px -1px 0 0 var(--dark),
+    inset 1px 1px 0 0 var(--white),
+    inset -2px -2px 0 0 var(--shadow),
+    inset 2px 2px 0 0 var(--face-light);
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #3a4353;
+::-webkit-scrollbar-corner {
+  background: var(--face);
 }
 
-@media (max-width: 640px) {
-  .section {
-    padding: 72px 0;
-  }
-
-  .shell {
-    padding: 0 20px;
-  }
-
-  .section-head {
-    gap: 12px;
-    margin-bottom: 32px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-
-  .reveal {
-    opacity: 1;
-    transform: none;
-    transition: none;
+@media (max-width: 760px) {
+  body {
+    font-size: 12px;
   }
 }
