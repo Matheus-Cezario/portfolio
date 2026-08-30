@@ -1,0 +1,38 @@
+<section class="section" id="about">
+  <div class="shell">
+    <div class="section-head" [appReveal]="0">
+      <span class="idx">01</span>
+      <h2>About</h2>
+      <span class="rule"></span>
+    </div>
+
+    <div class="cols">
+      <div class="prose" [appReveal]="60">
+        @for (paragraph of profile.summary; track $index) {
+          <p>{{ paragraph }}</p>
+        }
+        <p class="note">
+          I also spent time on a university extension project researching natural language processing
+          with Python and TensorFlow — the same curiosity that later turned into
+          <strong>AutorIA</strong>, a writing assistant for students.
+        </p>
+      </div>
+
+      <aside class="edu" [appReveal]="140">
+        <h3>Education &amp; certifications</h3>
+        <ul>
+          @for (course of courses; track course.title) {
+            <li>
+              <div class="row">
+                <span class="title">{{ course.title }}</span>
+                <span class="period">{{ course.period }}</span>
+              </div>
+              <span class="issuer">{{ course.issuer }}</span>
+              <span class="detail">{{ course.detail }}</span>
+            </li>
+          }
+        </ul>
+      </aside>
+    </div>
+  </div>
+</section>

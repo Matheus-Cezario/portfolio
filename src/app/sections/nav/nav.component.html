@@ -1,0 +1,39 @@
+<header class="bar" [class.is-scrolled]="scrolled()">
+  <nav class="shell inner" aria-label="Primary">
+    <a class="brand" href="#top" (click)="closeMenu()">
+      <span class="mark">MC</span>
+      <span class="brand-text">Matheus Cezário</span>
+    </a>
+
+    <button
+      class="burger"
+      type="button"
+      [attr.aria-expanded]="menuOpen()"
+      aria-label="Toggle navigation"
+      (click)="toggleMenu()"
+    >
+      <span [class.open]="menuOpen()"></span>
+    </button>
+
+    <ul class="links" [class.open]="menuOpen()">
+      @for (link of links; track link.id) {
+        <li>
+          <a
+            [href]="'#' + link.id"
+            [class.active]="active() === link.id"
+            (click)="closeMenu()"
+            >{{ link.label }}</a
+          >
+        </li>
+      }
+      <li class="social">
+        <a [href]="profile.github" target="_blank" rel="noreferrer noopener" aria-label="GitHub">
+          <app-icon name="github" [size]="17" />
+        </a>
+        <a [href]="profile.linkedin" target="_blank" rel="noreferrer noopener" aria-label="LinkedIn">
+          <app-icon name="linkedin" [size]="17" />
+        </a>
+      </li>
+    </ul>
+  </nav>
+</header>

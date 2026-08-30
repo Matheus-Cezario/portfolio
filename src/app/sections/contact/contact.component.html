@@ -1,0 +1,46 @@
+<section class="section contact" id="contact">
+  <div class="shell">
+    <div class="section-head" [appReveal]="0">
+      <span class="idx">05</span>
+      <h2>Contact</h2>
+      <span class="rule"></span>
+    </div>
+
+    <div class="panel" [appReveal]="60">
+      <h3>Let's build something</h3>
+      <p>
+        I am open to senior fullstack roles and to interesting problems in performance, architecture
+        and legacy modernisation. The fastest way to reach me is email.
+      </p>
+
+      <a class="mail" [href]="'mailto:' + profile.email">
+        <app-icon name="mail" [size]="18" />
+        {{ profile.email }}
+      </a>
+
+      <ul class="channels">
+        <li>
+          <a [href]="profile.github" target="_blank" rel="noreferrer noopener">
+            <app-icon name="github" [size]="18" />
+            <span class="label">GitHub</span>
+            <span class="handle">{{ profile.githubUser }}</span>
+          </a>
+        </li>
+        <li>
+          <a [href]="profile.linkedin" target="_blank" rel="noreferrer noopener">
+            <app-icon name="linkedin" [size]="18" />
+            <span class="label">LinkedIn</span>
+            <span class="handle">{{ profile.linkedinUser }}</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="shell inner">
+    <span>© {{ year }} {{ profile.name }}</span>
+    <span class="built">Built with Angular</span>
+  </div>
+</footer>

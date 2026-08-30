@@ -1,0 +1,27 @@
+<section class="section" id="skills">
+  <div class="shell">
+    <div class="section-head" [appReveal]="0">
+      <span class="idx">04</span>
+      <h2>Skills</h2>
+      <span class="rule"></span>
+    </div>
+
+    <div class="grid">
+      @for (group of groups; track group.title; let i = $index) {
+        <div class="group" [appReveal]="i * 60">
+          <h3>{{ group.title }}</h3>
+          <ul>
+            @for (item of group.items; track item) {
+              <li class="chip">{{ item }}</li>
+            }
+          </ul>
+        </div>
+      }
+    </div>
+
+    <p class="langs" [appReveal]="240">
+      <span>Spoken languages</span>
+      Native Portuguese · Technical English
+    </p>
+  </div>
+</section>

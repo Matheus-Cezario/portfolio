@@ -1,0 +1,46 @@
+<section class="section" id="experience">
+  <div class="shell">
+    <div class="section-head" [appReveal]="0">
+      <span class="idx">02</span>
+      <h2>Experience</h2>
+      <span class="rule"></span>
+    </div>
+
+    <ol class="timeline">
+      @for (job of jobs; track job.company + job.period; let i = $index) {
+        <li class="entry" [appReveal]="i * 70">
+          <span class="node" [class.current]="job.current"></span>
+
+          <div class="card">
+            <header>
+              <div class="who">
+                <h3>{{ job.role }}</h3>
+                <p class="company">
+                  {{ job.company }}
+                  <span class="dot-sep">·</span>
+                  <span class="place">{{ job.location }}</span>
+                </p>
+              </div>
+              <span class="period" [class.current]="job.current">{{ job.period }}</span>
+            </header>
+
+            <ul class="points">
+              @for (point of job.highlights; track point.label) {
+                <li>
+                  <strong>{{ point.label }}</strong>
+                  <span>{{ point.text }}</span>
+                </li>
+              }
+            </ul>
+
+            <ul class="stack">
+              @for (tech of job.stack; track tech) {
+                <li class="chip">{{ tech }}</li>
+              }
+            </ul>
+          </div>
+        </li>
+      }
+    </ol>
+  </div>
+</section>

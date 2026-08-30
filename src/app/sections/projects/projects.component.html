@@ -1,0 +1,85 @@
+<section class="section" id="projects">
+  <div class="shell">
+    <div class="section-head" [appReveal]="0">
+      <span class="idx">03</span>
+      <h2>Projects</h2>
+      <span class="rule"></span>
+      <a class="all" [href]="profile.github" target="_blank" rel="noreferrer noopener">
+        <app-icon name="github" [size]="15" />
+        All repositories
+      </a>
+    </div>
+
+    <div class="grid">
+      @for (project of projects; track project.name; let i = $index) {
+        <article class="card" [class.featured]="project.featured" [appReveal]="(i % 3) * 70">
+          <div class="top">
+            <app-icon name="code" [size]="20" />
+            <div class="links">
+              @if (project.demo) {
+                <a
+                  [href]="project.demo"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  [attr.aria-label]="project.name + ' live demo'"
+                >
+                  <app-icon name="external" [size]="17" />
+                </a>
+              }
+              @if (project.repo) {
+                <a
+                  [href]="project.repo"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  [attr.aria-label]="project.name + ' on GitHub'"
+                >
+                  <app-icon name="github" [size]="17" />
+                </a>
+              }
+            </div>
+          </div>
+
+          <h3>
+            @if (project.repo) {
+              <a [href]="project.repo" target="_blank" rel="noreferrer noopener">{{
+                project.name
+              }}</a>
+            } @else {
+              {{ project.name }}
+            }
+          </h3>
+
+          <p class="blurb">{{ project.blurb }}</p>
+
+          <ul class="stack">
+            @for (tech of project.stack; track tech) {
+              <li>{{ tech }}</li>
+            }
+          </ul>
+
+          <footer>
+            <span class="lang">
+              <span class="bullet" [style.background]="colorFor(project)"></span>
+              {{ project.language }}
+              @if (!project.repo) {
+                <span class="closed" title="Source code not public">· private source</span>
+              }
+            </span>
+
+            @if (project.learnMore) {
+              <a class="more" [href]="project.learnMore" target="_blank" rel="noreferrer noopener">
+                Learn more
+                <app-icon name="arrow" [size]="13" />
+              </a>
+            } @else if (project.demo) {
+              <a class="demo" [href]="project.demo" target="_blank" rel="noreferrer noopener">
+                Live demo
+                <app-icon name="arrow" [size]="13" />
+              </a>
+            }
+          </footer>
+        </article>
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,48 @@
+<section class="hero" id="top">
+  <div class="grid-bg" aria-hidden="true"></div>
+
+  <div class="shell">
+    <h1 [appReveal]="80">
+      {{ profile.name }}
+    </h1>
+
+    <p class="role" [appReveal]="140">
+      <span class="mono">{{ profile.role }}</span>
+      <span class="sep">/</span>
+      <span class="loc"
+        ><app-icon name="pin" [size]="14" /> {{ profile.location }}</span
+      >
+    </p>
+
+    <p class="tagline" [appReveal]="200">{{ profile.tagline }}</p>
+
+    <div class="actions" [appReveal]="260">
+      <a class="btn primary" href="#projects">
+        View projects
+        <app-icon name="arrow" [size]="16" />
+      </a>
+      <a class="btn ghost" [href]="'mailto:' + profile.email">
+        <app-icon name="mail" [size]="16" />
+        Get in touch
+      </a>
+      <a
+        class="btn plain"
+        href="matheus-cezario-resume.pdf"
+        target="_blank"
+        rel="noreferrer"
+      >
+        Résumé
+        <app-icon name="external" [size]="14" />
+      </a>
+    </div>
+
+    <ul class="stats" [appReveal]="320">
+      @for (stat of stats; track stat.label) {
+        <li>
+          <strong>{{ stat.value }}</strong>
+          <span>{{ stat.label }}</span>
+        </li>
+      }
+    </ul>
+  </div>
+</section>
