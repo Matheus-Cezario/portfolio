@@ -60,6 +60,9 @@ const PALETTE = [
 const CANVAS_W = 480;
 const CANVAS_H = 320;
 
+/** What an empty bitmap is, and what the eraser puts back. */
+const PAPER = '#ffffff';
+
 /** Stroke widths offered by the tool-options box, in bitmap pixels. */
 const WIDTHS = [1, 2, 3, 5, 8];
 
@@ -140,7 +143,7 @@ export class PaintComponent implements AfterViewInit {
 
   protected readonly tool = signal<PaintTool>('pencil');
   protected readonly foreground = signal('#000000');
-  protected readonly background = signal('#ffffff');
+  protected readonly background = signal(PAPER);
   protected readonly width = signal(1);
   protected readonly shapeStyle = signal<ShapeStyle>('outline');
   protected readonly coords = signal<Point | null>(null);
@@ -181,7 +184,7 @@ export class PaintComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     const canvas = this.surfaceRef.nativeElement;
     this.ctx = canvas.getContext('2d', { willReadFrequently: true })!;
-    this.ctx.fillStyle = '#ffffff';
+    this.ctx.fillStyle = PAPER;
     this.ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
 
@@ -470,10 +473,14 @@ export class PaintComponent implements AfterViewInit {
     this.ctx.stroke();
   }
 
-  /** The eraser is a square block of the background colour. */
+  /**
+   * A square block that takes the bitmap back to paper. The original erased
+   * with the background colour and swapped in the foreground on a right-drag,
+   * which reads as painting rather than erasing — both buttons clear here.
+   */
   private eraseAt(point: Point): void {
     const size = this.width() * 4;
-    this.ctx.fillStyle = this.otherColor();
+    this.ctx.fillStyle = PAPER;
     this.ctx.fillRect(Math.round(point.x - size / 2), Math.round(point.y - size / 2), size, size);
   }
 
@@ -651,7 +658,7 @@ export class PaintComponent implements AfterViewInit {
   private clearImage(): void {
     this.pushUndo();
     const canvas = this.surfaceRef.nativeElement;
-    this.ctx.fillStyle = '#ffffff';
+    this.ctx.fillStyle = PAPER;
     this.ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
 

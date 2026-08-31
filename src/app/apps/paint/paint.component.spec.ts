@@ -66,6 +66,31 @@ describe('PaintComponent', () => {
     expect(pixelAt(70, 60)).toEqual([0, 0, 255, 255]);
   });
 
+  it('erases back to paper with either button, whatever the palette holds', () => {
+    const paint = fixture.componentInstance as any;
+    paint.foreground.set('#ff0000');
+    paint.background.set('#0000ff');
+    paint.selectTool('fill');
+    fixture.detectChanges();
+    down(5, 5);
+    up();
+    expect(pixelAt(200, 150)).toEqual([255, 0, 0, 255]);
+
+    paint.selectTool('eraser');
+    fixture.detectChanges();
+
+    down(100, 150);
+    move(200, 150);
+    up();
+    expect(pixelAt(150, 150)).toEqual([255, 255, 255, 255]);
+
+    // A right-drag erases too — it must not lay down the foreground colour.
+    down(100, 250, 2);
+    move(200, 250);
+    up();
+    expect(pixelAt(150, 250)).toEqual([255, 255, 255, 255]);
+  });
+
   it('floods a bounded region with the fill tool', () => {
     const paint = fixture.componentInstance as any;
     paint.selectTool('fill');
