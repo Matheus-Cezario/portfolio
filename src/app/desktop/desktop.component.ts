@@ -6,9 +6,15 @@ import { ExperienceComponent } from '../sections/experience/experience.component
 import { ProjectsComponent } from '../sections/projects/projects.component';
 import { SkillsComponent } from '../sections/skills/skills.component';
 import { WelcomeComponent } from '../sections/welcome/welcome.component';
+import { PaintComponent } from '../apps/paint/paint.component';
 import { TaskbarComponent } from './taskbar.component';
 import { WinFrameComponent } from './win-frame.component';
-import { WINDOW_DEFS, WindowId, WindowManagerService } from './window-manager.service';
+import {
+  DEFAULT_MENUS,
+  WINDOW_DEFS,
+  WindowId,
+  WindowManagerService,
+} from './window-manager.service';
 
 interface DesktopIcon {
   id: WindowId;
@@ -27,6 +33,7 @@ interface DesktopIcon {
     ProjectsComponent,
     SkillsComponent,
     ContactComponent,
+    PaintComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './desktop.component.html',
@@ -35,6 +42,7 @@ interface DesktopIcon {
 export class DesktopComponent {
   protected readonly wm = inject(WindowManagerService);
   protected readonly defs = WINDOW_DEFS;
+  protected readonly defaultMenus = DEFAULT_MENUS;
 
   protected readonly icons: DesktopIcon[] = [
     { id: 'about', label: 'About Me' },
@@ -43,6 +51,7 @@ export class DesktopComponent {
     { id: 'skills', label: 'Skills' },
     { id: 'contact', label: 'Contact' },
     { id: 'welcome', label: 'Welcome.txt' },
+    { id: 'paint', label: 'Paint' },
   ];
 
   protected readonly selected = signal<WindowId | null>(null);

@@ -34,11 +34,13 @@
   </div>
 </div>
 
-<div class="menubar">
-  @for (menu of menus; track menu) {
-    <span class="menu-item">{{ menu }}</span>
-  }
-</div>
+@if (menus.length) {
+  <div class="menubar">
+    @for (menu of menus; track menu) {
+      <span class="menu-item">{{ menu }}</span>
+    }
+  </div>
+}
 
 <div class="body">
   <ng-content />

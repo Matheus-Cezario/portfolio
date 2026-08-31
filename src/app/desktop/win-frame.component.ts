@@ -7,7 +7,7 @@ import {
   inject,
 } from '@angular/core';
 import { PixelIconComponent } from '../shared/pixel-icon.component';
-import { Win, WindowManagerService } from './window-manager.service';
+import { DEFAULT_MENUS, Win, WindowManagerService } from './window-manager.service';
 
 /**
  * A draggable, resizable window frame. Content is projected into the body, so
@@ -33,8 +33,9 @@ import { Win, WindowManagerService } from './window-manager.service';
 })
 export class WinFrameComponent {
   @Input({ required: true }) win!: Win;
-  /** Menu bar labels — decorative, exactly as half of them were back then. */
-  @Input() menus: string[] = ['File', 'Edit', 'View', 'Help'];
+  /** Menu bar labels — decorative, exactly as half of them were back then.
+   *  An empty list hides the strip, for windows that draw a working menu. */
+  @Input() menus: string[] = DEFAULT_MENUS;
 
   protected readonly wm = inject(WindowManagerService);
   private readonly zone = inject(NgZone);

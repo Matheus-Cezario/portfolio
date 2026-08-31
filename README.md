@@ -69,12 +69,31 @@ src/
       projects/               Explorer-style list with a details pane
       skills/                 grouped skill boxes
       contact/                contact fields + links
+    apps/
+      paint/                  a working Paint: tools, palette, undo, save as PNG
 ```
+
+### Paint
+
+`apps/paint/` is a small drawing program rather than a CV section, so it lives outside
+`sections/`. It draws onto a fixed 480x320 canvas that scrolls inside its well, which is
+why resizing the window never costs you the drawing. Left button paints with the
+foreground colour, right button with the background one; Shift snaps lines to 45 degrees
+and boxes to squares; Ctrl+Z/Ctrl+Y walk a 16-step undo stack and Ctrl+S saves a PNG.
+
+Pixel-era output takes a little care: the pencil, one-pixel lines and rectangle outlines
+are laid down as hard pixels (Bresenham and filled bands) instead of stroked paths, since
+the canvas rasteriser softens corners and thin strokes. `paint.component.spec.ts` pins
+that behaviour down — `npm test` runs it.
+
+Paint owns its menu bar, so its entry in `WINDOW_DEFS` sets `menus: []` and the frame
+leaves the strip alone.
 
 ### Adding a window
 
 1. Add an id to `WindowId` and an entry to `WINDOW_DEFS` in `window-manager.service.ts`
-   (title, icon, default size).
+   (title, icon, default size, and `menus` if the frame's decorative menu bar needs
+   different labels — `[]` hides it entirely).
 2. Build the content component — give its `:host` `display: flex; flex-direction: column;
    flex: 1; min-height: 0` and put the body in a single `.pane9x` scroller.
 3. Render it under a new `@case` in `desktop.component.html` and, if it should sit on the

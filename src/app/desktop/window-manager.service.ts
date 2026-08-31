@@ -7,7 +7,8 @@ export type WindowId =
   | 'experience'
   | 'projects'
   | 'skills'
-  | 'contact';
+  | 'contact'
+  | 'paint';
 
 interface WindowDef {
   id: WindowId;
@@ -15,7 +16,12 @@ interface WindowDef {
   icon: PixelIconName;
   width: number;
   height: number;
+  /** Menu-bar labels for the frame; `[]` for windows that draw their own. */
+  menus?: string[];
 }
+
+/** What the decorative frame menu says unless a window asks for something else. */
+export const DEFAULT_MENUS = ['File', 'Edit', 'View', 'Help'];
 
 /** A window that is currently on the desktop. Every mutable field is a signal
  *  so dragging only re-renders the frame that moved. */
@@ -38,6 +44,8 @@ export const WINDOW_DEFS: WindowDef[] = [
   { id: 'projects', title: 'My Projects', icon: 'folder', width: 700, height: 500 },
   { id: 'skills', title: 'Skills', icon: 'tools', width: 580, height: 460 },
   { id: 'contact', title: 'Contact', icon: 'mail', width: 520, height: 400 },
+  // Paint owns its menu bar, so the frame leaves the strip to it.
+  { id: 'paint', title: 'untitled - Paint', icon: 'paint', width: 640, height: 520, menus: [] },
 ];
 
 export const TASKBAR_HEIGHT = 30;

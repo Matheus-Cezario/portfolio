@@ -1,0 +1,357 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  background: var(--face);
+}
+
+/* ---------- menu bar (this one actually opens) ---------- */
+
+.menubar {
+  display: flex;
+  gap: 2px;
+  flex: 0 0 auto;
+  padding: 1px 1px 3px;
+  font-size: 11px;
+}
+
+.menu {
+  position: relative;
+}
+
+.menu-label,
+.dropdown button {
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 11px;
+  line-height: 1.4;
+  cursor: default;
+}
+
+.menu-label {
+  padding: 1px 6px;
+}
+
+.menu-label:hover,
+.menu-label.is-open {
+  background: var(--sel);
+  color: var(--sel-text);
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 20;
+  min-width: 150px;
+  padding: 2px;
+  filter: drop-shadow(2px 2px 0 rgba(0, 0, 0, 0.35));
+}
+
+.dropdown button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+  padding: 3px 18px 3px 10px;
+  text-align: left;
+}
+
+.dropdown button:hover:not([disabled]) {
+  background: var(--sel);
+  color: var(--sel-text);
+}
+
+.dropdown button[disabled] {
+  color: var(--disabled);
+  text-shadow: 1px 1px 0 var(--disabled-hi);
+}
+
+.dropdown .accel {
+  color: inherit;
+  opacity: 0.85;
+}
+
+.dropdown .rule {
+  height: 2px;
+  margin: 3px 2px;
+  box-shadow:
+    inset 0 1px 0 0 var(--shadow),
+    inset 0 -1px 0 0 var(--white);
+}
+
+/* ---------- workspace ---------- */
+
+.workspace {
+  display: flex;
+  gap: 3px;
+  flex: 1;
+  min-height: 0;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 0 0 auto;
+  width: 58px;
+}
+
+.toolbox {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  padding: 2px;
+}
+
+.tool,
+.option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  cursor: default;
+}
+
+.tool {
+  height: 24px;
+}
+
+.tool.is-on,
+.tool:active {
+  /* The pressed tool sinks into the box over the classic dithered fill. */
+  background: repeating-conic-gradient(#fff 0 25%, #dfdfdf 0 50%) 0 0 / 2px 2px;
+  box-shadow:
+    inset -1px -1px 0 0 var(--white),
+    inset 1px 1px 0 0 var(--shadow),
+    inset -2px -2px 0 0 var(--face-light),
+    inset 2px 2px 0 0 var(--dark);
+}
+
+.tool svg {
+  position: relative;
+}
+
+.tool.is-on svg {
+  top: 1px;
+  left: 1px;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-height: 72px;
+  padding: 3px;
+}
+
+.option {
+  height: 15px;
+  background: var(--field);
+}
+
+.option.is-on {
+  background: var(--sel);
+}
+
+.option .bar {
+  width: 30px;
+  background: #000;
+}
+
+.option.is-on .bar {
+  background: var(--sel-text);
+}
+
+.option .shape {
+  width: 26px;
+  height: 11px;
+  border: 1px solid #000;
+}
+
+.option.is-on .shape {
+  border-color: var(--sel-text);
+}
+
+.option .shape.both {
+  background: var(--shadow);
+}
+
+.option .shape.filled {
+  border-color: transparent;
+  background: #000;
+}
+
+.option.is-on .shape.filled {
+  background: var(--sel-text);
+}
+
+/* ---------- the bitmap and its well ---------- */
+
+.workspace .canvas-well {
+  flex: 1;
+  min-width: 0;
+  overflow: auto;
+  scrollbar-gutter: stable;
+  padding: 4px;
+  background: var(--shadow);
+}
+
+.surface {
+  display: block;
+  background: #fff;
+  cursor: crosshair;
+  touch-action: none;
+  box-shadow: 1px 1px 0 0 var(--dark);
+}
+
+.surface.tool-fill,
+.surface.tool-picker {
+  cursor: cell;
+}
+
+/* ---------- palette ---------- */
+
+.palette-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 0 0 auto;
+  padding: 3px 2px;
+}
+
+.current {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  flex: 0 0 auto;
+  cursor: default;
+}
+
+.current .chip,
+.swatch {
+  box-shadow:
+    inset -1px -1px 0 0 var(--white),
+    inset 1px 1px 0 0 var(--shadow),
+    0 0 0 1px var(--dark);
+}
+
+.current .chip {
+  position: absolute;
+  width: 19px;
+  height: 19px;
+}
+
+.current .front {
+  top: 2px;
+  left: 2px;
+  z-index: 1;
+}
+
+.current .back {
+  bottom: 2px;
+  right: 2px;
+}
+
+.palette {
+  display: grid;
+  grid-template-columns: repeat(14, 16px);
+  grid-template-rows: repeat(2, 16px);
+  gap: 1px;
+}
+
+.swatch {
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: 0;
+  cursor: default;
+}
+
+.swatch:focus-visible {
+  outline: 1px dotted #fff;
+  outline-offset: -3px;
+}
+
+/* ---------- status bar ---------- */
+
+.statusbar .coords {
+  width: 64px;
+}
+
+.statusbar .size {
+  width: 72px;
+}
+
+.hidden-input {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ---------- About box ---------- */
+
+.about-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+}
+
+.about {
+  width: 260px;
+  padding: 3px;
+  filter: drop-shadow(3px 3px 0 rgba(0, 0, 0, 0.35));
+}
+
+.about-title {
+  display: flex;
+  align-items: center;
+  height: 20px;
+  padding: 0 2px 0 4px;
+  background: linear-gradient(90deg, var(--title-a1), var(--title-a2));
+  color: #fff;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.about-body {
+  padding: 12px 12px 10px;
+}
+
+.about-body p + p {
+  margin-top: 6px;
+}
+
+.about-buttons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+@media (max-width: 480px) {
+  .palette {
+    grid-template-columns: repeat(14, 13px);
+    grid-template-rows: repeat(2, 13px);
+  }
+
+  .swatch {
+    width: 13px;
+    height: 13px;
+  }
+
+  .statusbar .grow {
+    display: none;
+  }
+}

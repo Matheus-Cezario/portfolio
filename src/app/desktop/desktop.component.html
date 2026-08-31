@@ -18,7 +18,7 @@
   </ul>
 
   @for (win of wm.windows(); track win.id) {
-    <app-win-frame [win]="win">
+    <app-win-frame [win]="win" [menus]="win.menus ?? defaultMenus">
       @switch (win.id) {
         @case ('welcome') {
           <app-welcome />
@@ -37,6 +37,9 @@
         }
         @case ('contact') {
           <app-contact />
+        }
+        @case ('paint') {
+          <app-paint />
         }
       }
     </app-win-frame>

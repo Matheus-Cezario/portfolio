@@ -1,0 +1,224 @@
+<div class="menubar">
+  @for (menu of menus; track menu.label) {
+    <div class="menu">
+      <button
+        type="button"
+        class="menu-label"
+        [class.is-open]="openMenu() === menu.label"
+        [attr.aria-expanded]="openMenu() === menu.label"
+        (click)="toggleMenu(menu.label)"
+        (pointerenter)="hoverMenu(menu.label)"
+      >
+        {{ menu.label }}
+      </button>
+
+      @if (openMenu() === menu.label) {
+        <ul class="dropdown raised" role="menu">
+          @for (item of menu.items; track $index) {
+            @if (item.label === '-') {
+              <li class="rule" aria-hidden="true"></li>
+            } @else {
+              <li>
+                <button
+                  type="button"
+                  role="menuitem"
+                  [disabled]="isDisabled(item)"
+                  (click)="run(item)"
+                >
+                  <span>{{ item.label }}</span>
+                  @if (item.accel) {
+                    <span class="accel">{{ item.accel }}</span>
+                  }
+                </button>
+              </li>
+            }
+          }
+        </ul>
+      }
+    </div>
+  }
+</div>
+
+<div class="workspace">
+  <div class="sidebar">
+    <div class="toolbox sunken-thin">
+      @for (item of tools; track item.id) {
+        <button
+          type="button"
+          class="tool raised"
+          [class.is-on]="tool() === item.id"
+          [title]="item.label"
+          [attr.aria-label]="item.label"
+          [attr.aria-pressed]="tool() === item.id"
+          (click)="selectTool(item.id)"
+        >
+          <svg width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges" aria-hidden="true">
+            @switch (item.id) {
+              @case ('pencil') {
+                <polygon points="3,13 4,10 10,4 12,6 6,12" fill="#ffe0a8" stroke="#000" />
+                <polygon points="10,4 11,3 13,5 12,6" fill="#c0c0c0" stroke="#000" />
+                <polygon points="3,13 4,12 5,13" fill="#000" />
+              }
+              @case ('brush') {
+                <polygon points="9,3 13,7 9,9 7,7" fill="#c0c0c0" stroke="#000" />
+                <polygon points="7,7 9,9 5,13 3,13 3,11" fill="#804000" stroke="#000" />
+              }
+              @case ('airbrush') {
+                <rect x="6" y="6" width="5" height="8" fill="#c0c0c0" stroke="#000" />
+                <rect x="7" y="3" width="3" height="3" fill="#808080" stroke="#000" />
+                <rect x="2" y="2" width="1" height="1" fill="#000" />
+                <rect x="4" y="4" width="1" height="1" fill="#000" />
+                <rect x="2" y="6" width="1" height="1" fill="#000" />
+                <rect x="12" y="3" width="1" height="1" fill="#000" />
+              }
+              @case ('eraser') {
+                <polygon points="3,10 8,5 12,9 7,14 3,14" fill="#fff" stroke="#000" />
+                <polygon points="8,5 10,3 14,7 12,9" fill="#ff8080" stroke="#000" />
+              }
+              @case ('fill') {
+                <polygon points="4,8 8,4 12,8 8,12" fill="#c0c0c0" stroke="#000" />
+                <rect x="5" y="2" width="1" height="4" fill="#000" />
+                <polygon points="12,9 14,13 10,13" fill="#000080" />
+              }
+              @case ('picker') {
+                <polygon points="9,3 13,7 11,9 7,5" fill="#c0c0c0" stroke="#000" />
+                <polygon points="7,5 11,9 5,14 2,14 2,11" fill="#fff" stroke="#000" />
+                <rect x="2" y="11" width="3" height="3" fill="#000080" />
+              }
+              @case ('line') {
+                <line x1="3" y1="13" x2="13" y2="3" stroke="#000" stroke-width="2" />
+              }
+              @case ('rect') {
+                <rect x="2" y="4" width="12" height="8" fill="none" stroke="#000" />
+              }
+              @case ('roundrect') {
+                <path d="M4 4h8v8h-8z" fill="none" stroke="#000" />
+                <rect x="2" y="4" width="12" height="8" fill="none" stroke="#000" rx="3" />
+              }
+              @case ('ellipse') {
+                <ellipse cx="8" cy="8" rx="6" ry="4.5" fill="none" stroke="#000" />
+              }
+            }
+          </svg>
+        </button>
+      }
+    </div>
+
+    <div class="options sunken-thin">
+      @if (showsWidths()) {
+        @for (value of widths; track value) {
+          <button
+            type="button"
+            class="option"
+            [class.is-on]="width() === value"
+            [attr.aria-label]="value + ' pixels'"
+            (click)="width.set(value)"
+          >
+            <span class="bar" [style.height.px]="value"></span>
+          </button>
+        }
+      } @else if (showsShapeStyle()) {
+        <button
+          type="button"
+          class="option"
+          [class.is-on]="shapeStyle() === 'outline'"
+          aria-label="Outline"
+          (click)="shapeStyle.set('outline')"
+        >
+          <span class="shape outline"></span>
+        </button>
+        <button
+          type="button"
+          class="option"
+          [class.is-on]="shapeStyle() === 'both'"
+          aria-label="Filled with outline"
+          (click)="shapeStyle.set('both')"
+        >
+          <span class="shape both"></span>
+        </button>
+        <button
+          type="button"
+          class="option"
+          [class.is-on]="shapeStyle() === 'filled'"
+          aria-label="Filled"
+          (click)="shapeStyle.set('filled')"
+        >
+          <span class="shape filled"></span>
+        </button>
+      }
+    </div>
+  </div>
+
+  <div class="canvas-well sunken">
+    <canvas
+      #surface
+      [width]="canvasW"
+      [height]="canvasH"
+      [class]="'surface tool-' + tool()"
+      (pointerdown)="onPointerDown($event)"
+      (pointermove)="onPointerMove($event)"
+      (pointerup)="onPointerUp($event)"
+      (pointercancel)="onPointerUp($event)"
+      (pointerleave)="onPointerLeave()"
+      (contextmenu)="$event.preventDefault()"
+    ></canvas>
+  </div>
+</div>
+
+<div class="palette-bar">
+  <div class="current" title="Foreground and background — click a colour to set the foreground, right-click for the background" (click)="swapColors()">
+    <span class="chip back" [style.background]="background()"></span>
+    <span class="chip front" [style.background]="foreground()"></span>
+  </div>
+
+  <div class="palette">
+    @for (color of palette; track color) {
+      <button
+        type="button"
+        class="swatch"
+        [style.background]="color"
+        [attr.aria-label]="color"
+        (click)="chooseColor($event, color)"
+        (contextmenu)="$event.preventDefault(); chooseColor($event, color)"
+      ></button>
+    }
+  </div>
+</div>
+
+<div class="statusbar">
+  <span class="grow">{{ hint() }} — left button draws, right button uses the background colour</span>
+  <span class="coords">
+    @if (coords(); as point) {
+      {{ point.x }},{{ point.y }}
+    }
+  </span>
+  <span class="size">{{ canvasW }} x {{ canvasH }}</span>
+</div>
+
+<input
+  #colorInput
+  type="color"
+  class="hidden-input"
+  [value]="foreground()"
+  (input)="onCustomColor($event)"
+  tabindex="-1"
+  aria-hidden="true"
+/>
+
+@if (aboutOpen()) {
+  <div class="about-backdrop">
+    <div class="about raised" role="dialog" aria-label="About Paint">
+      <div class="about-title">About Paint</div>
+      <div class="about-body">
+        <p><strong>Paint</strong></p>
+        <p>Version 4.0 — rebuilt in Angular for this portfolio.</p>
+        <div class="divider9x"></div>
+        <p>Pick a tool, hold <strong>Shift</strong> to snap lines and squares, and press
+          <strong>Ctrl+S</strong> to save your masterpiece as a PNG.</p>
+        <div class="about-buttons">
+          <button type="button" class="btn9x" (click)="aboutOpen.set(false)">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
