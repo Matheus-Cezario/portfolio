@@ -1,0 +1,149 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  background: var(--face);
+}
+
+/* The felt the board sits on: scrolls when an Expert grid outgrows the window. */
+.table {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 6px;
+}
+
+.panel {
+  padding: 5px;
+  background: var(--face);
+  box-shadow:
+    inset -2px -2px 0 0 var(--shadow),
+    inset 2px 2px 0 0 var(--white);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin-bottom: 5px;
+  padding: 3px 4px;
+  box-shadow:
+    inset -1px -1px 0 0 var(--white),
+    inset 1px 1px 0 0 var(--shadow),
+    inset -2px -2px 0 0 var(--face-light),
+    inset 2px 2px 0 0 var(--dark);
+}
+
+.led {
+  padding: 1px 2px;
+  background: #000;
+  color: #ff0000;
+  font-family: var(--font-mono);
+  font-size: 17px;
+  font-weight: bold;
+  line-height: 1.1;
+  letter-spacing: 1px;
+  text-shadow: 0 0 2px rgba(255, 0, 0, 0.6);
+}
+
+.face {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 0;
+  cursor: default;
+}
+
+.face:active {
+  box-shadow:
+    inset -1px -1px 0 0 var(--white),
+    inset 1px 1px 0 0 var(--shadow),
+    inset -2px -2px 0 0 var(--face-light),
+    inset 2px 2px 0 0 var(--dark);
+}
+
+/* ---------- the minefield ---------- */
+
+.grid {
+  display: grid;
+  grid-auto-rows: 16px;
+  width: max-content;
+  box-shadow:
+    inset -1px -1px 0 0 var(--white),
+    inset 1px 1px 0 0 var(--shadow),
+    inset -2px -2px 0 0 var(--face-light),
+    inset 2px 2px 0 0 var(--dark);
+  border: 3px solid transparent;
+}
+
+.cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: 0;
+  background: var(--face);
+  color: transparent;
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 1;
+  cursor: default;
+  touch-action: manipulation;
+  box-shadow:
+    inset -2px -2px 0 0 var(--shadow),
+    inset 2px 2px 0 0 var(--white);
+}
+
+.cell.s-revealed,
+.cell.s-exploded,
+.cell.s-wrong {
+  box-shadow: none;
+  border-top: 1px solid var(--shadow);
+  border-left: 1px solid var(--shadow);
+}
+
+.cell.s-exploded {
+  background: #ff0000;
+}
+
+.cell .mark {
+  color: #000;
+}
+
+/* The number colours are the ones everyone still knows by heart. */
+.cell.n1 {
+  color: #0000ff;
+}
+.cell.n2 {
+  color: #008000;
+}
+.cell.n3 {
+  color: #ff0000;
+}
+.cell.n4 {
+  color: #000080;
+}
+.cell.n5 {
+  color: #800000;
+}
+.cell.n6 {
+  color: #008080;
+}
+.cell.n7 {
+  color: #000000;
+}
+.cell.n8 {
+  color: #808080;
+}

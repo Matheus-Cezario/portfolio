@@ -9,7 +9,8 @@ export type PixelIconName =
   | 'mail'
   | 'globe'
   | 'floppy'
-  | 'paint';
+  | 'paint'
+  | 'mine';
 
 /**
  * Hand-drawn 32x32 icons in the classic 16-colour palette, rendered with
@@ -111,6 +112,16 @@ export type PixelIconName =
           <circle cx="8" cy="23" r="2" fill="#ff00ff" />
           <polygon points="24,3 29,8 21,16 19,14" fill="#c0c0c0" stroke="#0a0a0a" />
           <polygon points="19,14 21,16 17,20 15,18" fill="#804000" stroke="#0a0a0a" />
+        }
+        @case ('mine') {
+          <rect x="2" y="2" width="28" height="28" fill="#c0c0c0" stroke="#0a0a0a" />
+          <rect x="3" y="3" width="26" height="1" fill="#ffffff" />
+          <rect x="3" y="3" width="1" height="26" fill="#ffffff" />
+          <rect x="6" y="15" width="20" height="2" fill="#0a0a0a" />
+          <rect x="15" y="6" width="2" height="20" fill="#0a0a0a" />
+          <path d="M9 9l14 14M23 9L9 23" stroke="#0a0a0a" stroke-width="2" />
+          <circle cx="16" cy="16" r="7" fill="#0a0a0a" />
+          <rect x="12" y="12" width="3" height="3" fill="#ffffff" />
         }
       }
     </svg>

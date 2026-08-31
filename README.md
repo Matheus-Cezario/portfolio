@@ -57,6 +57,8 @@ src/
     shared/
       icon.component.ts       inline SVG icon set (links)
       pixel-icon.component.ts 32x32 blocky icons in the 16-colour palette
+      menu-bar.component.ts   working File/Edit/... menus for the apps
+      about-box.component.ts  the Help > About modal
     desktop/
       window-manager.service.ts  open/close/focus/minimise/maximise, z-order, geometry
       win-frame.component.*      window chrome: title bar, menu bar, drag and resize
@@ -71,6 +73,7 @@ src/
       contact/                contact fields + links
     apps/
       paint/                  a working Paint: tools, palette, undo, save as PNG
+      minesweeper/            a working Minesweeper: three levels, chording, clock
 ```
 
 ### Paint
@@ -88,6 +91,21 @@ that behaviour down — `npm test` runs it.
 
 Paint owns its menu bar, so its entry in `WINDOW_DEFS` sets `menus: []` and the frame
 leaves the strip alone.
+
+### Minesweeper
+
+`apps/minesweeper/` is the game, at the three original sizes — Beginner 9x9, Intermediate
+16x16, Expert 30x16 — switched from the Game menu, which resizes the window to fit via
+`WindowManagerService.sizeToContent`. Left button clears, right button cycles flag and
+query mark, both buttons over a satisfied number chord its neighbours open, and F2 starts
+a new game. Touch has no second button, so a 400ms press plants the flag instead.
+
+Mines are laid *after* the opening click and never under it, so move one can never lose
+the game. Each square owns a `state` signal, which keeps a 480-square Expert board
+repainting only the cells that actually changed.
+
+Both apps render `app-menu-bar` and `app-about-box` from `shared/`, so the dropdown
+behaviour and the About modal exist once.
 
 ### Adding a window
 

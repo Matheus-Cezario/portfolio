@@ -9,6 +9,8 @@ import {
   inject,
   signal,
 } from '@angular/core';
+import { AboutBoxComponent } from '../../shared/about-box.component';
+import { MenuBarComponent, MenuGroup } from '../../shared/menu-bar.component';
 import { WindowManagerService } from '../../desktop/window-manager.service';
 
 export type PaintTool =
@@ -43,12 +45,6 @@ type PaintAction =
   | 'edit-colors'
   | 'about';
 
-interface MenuItem {
-  label: string;
-  accel?: string;
-  action?: PaintAction;
-}
-
 /** The 28 colours of the original palette, in two rows of fourteen. */
 const PALETTE = [
   '#000000', '#808080', '#800000', '#808000', '#008000', '#008080', '#000080',
@@ -79,6 +75,7 @@ const UNDO_DEPTH = 16;
  */
 @Component({
   selector: 'app-paint',
+  imports: [MenuBarComponent, AboutBoxComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './paint.component.html',
   styleUrl: './paint.component.scss',
@@ -105,7 +102,7 @@ export class PaintComponent implements AfterViewInit {
     { id: 'ellipse', label: 'Ellipse' },
   ];
 
-  protected readonly menus: { label: string; items: MenuItem[] }[] = [
+  protected readonly menus = computed<MenuGroup[]>(() => [
     {
       label: 'File',
       items: [
@@ -116,8 +113,8 @@ export class PaintComponent implements AfterViewInit {
     {
       label: 'Edit',
       items: [
-        { label: 'Undo', accel: 'Ctrl+Z', action: 'undo' },
-        { label: 'Repeat', accel: 'Ctrl+Y', action: 'redo' },
+        { label: 'Undo', accel: 'Ctrl+Z', action: 'undo', disabled: !this.canUndo() },
+        { label: 'Repeat', accel: 'Ctrl+Y', action: 'redo', disabled: !this.canRedo() },
         { label: '-' },
         { label: 'Clear Image', action: 'clear' },
       ],
@@ -131,15 +128,12 @@ export class PaintComponent implements AfterViewInit {
         { label: 'Invert Colors', accel: 'Ctrl+I', action: 'invert' },
       ],
     },
-    {
-      label: 'Colors',
-      items: [{ label: 'Edit Colors...', action: 'edit-colors' }],
-    },
-    {
-      label: 'Help',
-      items: [{ label: 'About Paint', action: 'about' }],
-    },
-  ];
+    { label: 'Colors', items: [{ label: 'Edit Colors...', action: 'edit-colors' }] },
+    { label: 'Help', items: [{ label: 'About Paint', action: 'about' }] },
+  ]);
+
+  protected readonly canUndo = signal(false);
+  protected readonly canRedo = signal(false);
 
   protected readonly tool = signal<PaintTool>('pencil');
   protected readonly foreground = signal('#000000');
@@ -147,10 +141,7 @@ export class PaintComponent implements AfterViewInit {
   protected readonly width = signal(1);
   protected readonly shapeStyle = signal<ShapeStyle>('outline');
   protected readonly coords = signal<Point | null>(null);
-  protected readonly openMenu = signal<string | null>(null);
   protected readonly aboutOpen = signal(false);
-  protected readonly canUndo = signal(false);
-  protected readonly canRedo = signal(false);
 
   /** Free-hand and straight-line tools share the width picker. */
   protected readonly showsWidths = computed(() =>
@@ -164,7 +155,6 @@ export class PaintComponent implements AfterViewInit {
   );
 
   private readonly wm = inject(WindowManagerService);
-  private readonly host = inject(ElementRef<HTMLElement>);
 
   private ctx!: CanvasRenderingContext2D;
   private undoStack: ImageData[] = [];
@@ -208,25 +198,8 @@ export class PaintComponent implements AfterViewInit {
 
   // ------------------------------------------------------------------ menus
 
-  toggleMenu(label: string): void {
-    this.openMenu.update((open) => (open === label ? null : label));
-  }
-
-  /** Sliding across the bar with a menu open switches menus, as it should. */
-  hoverMenu(label: string): void {
-    if (this.openMenu()) this.openMenu.set(label);
-  }
-
-  isDisabled(item: MenuItem): boolean {
-    if (item.action === 'undo') return !this.canUndo();
-    if (item.action === 'redo') return !this.canRedo();
-    return false;
-  }
-
-  run(item: MenuItem): void {
-    if (!item.action || this.isDisabled(item)) return;
-    this.openMenu.set(null);
-    this.exec(item.action);
+  onMenuChoose(action: string): void {
+    this.exec(action as PaintAction);
   }
 
   onCustomColor(event: Event): void {
@@ -266,21 +239,11 @@ export class PaintComponent implements AfterViewInit {
     }
   }
 
-  @HostListener('document:pointerdown', ['$event'])
-  onDocumentPointerDown(event: PointerEvent): void {
-    if (!this.openMenu()) return;
-    const target = event.target as HTMLElement;
-    if (!this.host.nativeElement.contains(target) || !target.closest('.menubar')) {
-      this.openMenu.set(null);
-    }
-  }
-
   @HostListener('document:keydown', ['$event'])
   onKeydown(event: KeyboardEvent): void {
     if (this.wm.activeId() !== 'paint') return;
 
     if (event.key === 'Escape') {
-      this.openMenu.set(null);
       this.aboutOpen.set(false);
       return;
     }
@@ -306,7 +269,6 @@ export class PaintComponent implements AfterViewInit {
   onPointerDown(event: PointerEvent): void {
     if (event.button !== 0 && event.button !== 2) return;
     event.preventDefault();
-    this.openMenu.set(null);
 
     const point = this.positionOf(event);
     this.secondary = event.button === 2;

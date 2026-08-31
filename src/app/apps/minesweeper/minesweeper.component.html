@@ -1,0 +1,117 @@
+<app-menu-bar [menus]="menus()" (choose)="onMenuChoose($event)" />
+
+<div class="table">
+  <div class="panel">
+    <div class="head">
+      <div class="led" role="status" aria-label="Mines remaining">{{ counterText() }}</div>
+
+      <button
+        type="button"
+        class="face raised"
+        aria-label="New game"
+        (click)="reset()"
+        (pointerdown)="$event.preventDefault()"
+      >
+        <svg width="17" height="17" viewBox="0 0 17 17" aria-hidden="true">
+          <circle cx="8.5" cy="8.5" r="7.5" fill="#ffff00" stroke="#000" />
+          @switch (face()) {
+            @case ('dead') {
+              <path
+                d="M3.5 4.5l3 3m0-3l-3 3M10.5 4.5l3 3m0-3l-3 3"
+                stroke="#000"
+                fill="none"
+              />
+              <circle cx="8.5" cy="12" r="2.5" fill="#000" />
+            }
+            @case ('cool') {
+              <path d="M2 6.5h13v2a3 3 0 0 1-6 0 3 3 0 0 1-6 0z" fill="#000" />
+              <path d="M5 12.5a4 4 0 0 0 7 0" stroke="#000" fill="none" />
+            }
+            @case ('worried') {
+              <circle cx="5.5" cy="6.5" r="1.2" fill="#000" />
+              <circle cx="11.5" cy="6.5" r="1.2" fill="#000" />
+              <circle cx="8.5" cy="12" r="2.5" fill="#000" />
+            }
+            @default {
+              <circle cx="5.5" cy="6.5" r="1.2" fill="#000" />
+              <circle cx="11.5" cy="6.5" r="1.2" fill="#000" />
+              <path d="M4.5 10.5a4.5 4.5 0 0 0 8 0" stroke="#000" fill="none" />
+            }
+          }
+        </svg>
+      </button>
+
+      <div class="led" role="timer" aria-label="Seconds elapsed">{{ clockText() }}</div>
+    </div>
+
+    <div
+      class="grid"
+      [style.grid-template-columns]="'repeat(' + board().cols + ', 16px)'"
+      (contextmenu)="$event.preventDefault()"
+    >
+      @for (cell of cells(); track cell.index) {
+        <button
+          type="button"
+          class="cell"
+          [class]="'cell s-' + cell.state() + (cell.state() === 'revealed' ? ' n' + cell.adjacent : '')"
+          [attr.aria-label]="'Row ' + (cell.row + 1) + ' column ' + (cell.col + 1)"
+          (pointerdown)="onCellDown(cell, $event)"
+          (pointerup)="onCellUp(cell, $event)"
+        >
+          @switch (cell.state()) {
+            @case ('flag') {
+              <svg width="10" height="10" viewBox="0 0 10 10" shape-rendering="crispEdges">
+                <polygon points="2,1 7,3 2,5" fill="#ff0000" />
+                <rect x="2" y="1" width="1" height="6" fill="#000" />
+                <rect x="0" y="8" width="7" height="1" fill="#000" />
+                <rect x="1" y="7" width="5" height="1" fill="#000" />
+              </svg>
+            }
+            @case ('question') {
+              <span class="mark">?</span>
+            }
+            @case ('revealed') {
+              @if (cell.mine) {
+                <svg width="10" height="10" viewBox="0 0 10 10" shape-rendering="crispEdges">
+                  <circle cx="5" cy="5" r="3" fill="#000" />
+                  <rect x="0" y="4.5" width="10" height="1" fill="#000" />
+                  <rect x="4.5" y="0" width="1" height="10" fill="#000" />
+                  <rect x="3" y="3" width="1" height="1" fill="#fff" />
+                </svg>
+              } @else if (cell.adjacent > 0) {
+                {{ cell.adjacent }}
+              }
+            }
+            @case ('exploded') {
+              <svg width="10" height="10" viewBox="0 0 10 10" shape-rendering="crispEdges">
+                <circle cx="5" cy="5" r="3" fill="#000" />
+                <rect x="0" y="4.5" width="10" height="1" fill="#000" />
+                <rect x="4.5" y="0" width="1" height="10" fill="#000" />
+              </svg>
+            }
+            @case ('wrong') {
+              <svg width="10" height="10" viewBox="0 0 10 10" shape-rendering="crispEdges">
+                <circle cx="5" cy="5" r="3" fill="#000" />
+                <rect x="0" y="4.5" width="10" height="1" fill="#000" />
+                <rect x="4.5" y="0" width="1" height="10" fill="#000" />
+                <path d="M0 0l10 10M10 0L0 10" stroke="#ff0000" stroke-width="1.5" />
+              </svg>
+            }
+          }
+        </button>
+      }
+    </div>
+  </div>
+</div>
+
+@if (aboutOpen()) {
+  <app-about-box heading="About Minesweeper" (close)="aboutOpen.set(false)">
+    <p><strong>Minesweeper</strong></p>
+    <p>Version 3.1 — rebuilt in Angular for this portfolio.</p>
+    <div class="divider9x"></div>
+    <p>
+      Left button clears a square, right button plants a flag, and both together over a
+      finished number open its neighbours. <strong>F2</strong> starts a new game.
+    </p>
+  </app-about-box>
+}

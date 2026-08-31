@@ -1,43 +1,4 @@
-<div class="menubar">
-  @for (menu of menus; track menu.label) {
-    <div class="menu">
-      <button
-        type="button"
-        class="menu-label"
-        [class.is-open]="openMenu() === menu.label"
-        [attr.aria-expanded]="openMenu() === menu.label"
-        (click)="toggleMenu(menu.label)"
-        (pointerenter)="hoverMenu(menu.label)"
-      >
-        {{ menu.label }}
-      </button>
-
-      @if (openMenu() === menu.label) {
-        <ul class="dropdown raised" role="menu">
-          @for (item of menu.items; track $index) {
-            @if (item.label === '-') {
-              <li class="rule" aria-hidden="true"></li>
-            } @else {
-              <li>
-                <button
-                  type="button"
-                  role="menuitem"
-                  [disabled]="isDisabled(item)"
-                  (click)="run(item)"
-                >
-                  <span>{{ item.label }}</span>
-                  @if (item.accel) {
-                    <span class="accel">{{ item.accel }}</span>
-                  }
-                </button>
-              </li>
-            }
-          }
-        </ul>
-      }
-    </div>
-  }
-</div>
+<app-menu-bar [menus]="menus()" (choose)="onMenuChoose($event)" />
 
 <div class="workspace">
   <div class="sidebar">
@@ -206,19 +167,13 @@
 />
 
 @if (aboutOpen()) {
-  <div class="about-backdrop">
-    <div class="about raised" role="dialog" aria-label="About Paint">
-      <div class="about-title">About Paint</div>
-      <div class="about-body">
-        <p><strong>Paint</strong></p>
-        <p>Version 4.0 — rebuilt in Angular for this portfolio.</p>
-        <div class="divider9x"></div>
-        <p>Pick a tool, hold <strong>Shift</strong> to snap lines and squares, and press
-          <strong>Ctrl+S</strong> to save your masterpiece as a PNG.</p>
-        <div class="about-buttons">
-          <button type="button" class="btn9x" (click)="aboutOpen.set(false)">OK</button>
-        </div>
-      </div>
-    </div>
-  </div>
+  <app-about-box heading="About Paint" (close)="aboutOpen.set(false)">
+    <p><strong>Paint</strong></p>
+    <p>Version 4.0 — rebuilt in Angular for this portfolio.</p>
+    <div class="divider9x"></div>
+    <p>
+      Pick a tool, hold <strong>Shift</strong> to snap lines and squares, and press
+      <strong>Ctrl+S</strong> to save your masterpiece as a PNG.
+    </p>
+  </app-about-box>
 }

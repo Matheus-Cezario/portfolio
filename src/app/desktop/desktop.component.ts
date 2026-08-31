@@ -7,6 +7,7 @@ import { ProjectsComponent } from '../sections/projects/projects.component';
 import { SkillsComponent } from '../sections/skills/skills.component';
 import { WelcomeComponent } from '../sections/welcome/welcome.component';
 import { PaintComponent } from '../apps/paint/paint.component';
+import { MinesweeperComponent } from '../apps/minesweeper/minesweeper.component';
 import { TaskbarComponent } from './taskbar.component';
 import { WinFrameComponent } from './win-frame.component';
 import {
@@ -34,6 +35,7 @@ interface DesktopIcon {
     SkillsComponent,
     ContactComponent,
     PaintComponent,
+    MinesweeperComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './desktop.component.html',
@@ -52,6 +54,7 @@ export class DesktopComponent {
     { id: 'contact', label: 'Contact' },
     { id: 'welcome', label: 'Welcome.txt' },
     { id: 'paint', label: 'Paint' },
+    { id: 'minesweeper', label: 'Minesweeper' },
   ];
 
   protected readonly selected = signal<WindowId | null>(null);

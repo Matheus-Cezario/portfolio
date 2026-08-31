@@ -8,7 +8,8 @@ export type WindowId =
   | 'projects'
   | 'skills'
   | 'contact'
-  | 'paint';
+  | 'paint'
+  | 'minesweeper';
 
 interface WindowDef {
   id: WindowId;
@@ -46,6 +47,7 @@ export const WINDOW_DEFS: WindowDef[] = [
   { id: 'contact', title: 'Contact', icon: 'mail', width: 520, height: 400 },
   // Paint owns its menu bar, so the frame leaves the strip to it.
   { id: 'paint', title: 'untitled - Paint', icon: 'paint', width: 640, height: 520, menus: [] },
+  { id: 'minesweeper', title: 'Minesweeper', icon: 'mine', width: 300, height: 320, menus: [] },
 ];
 
 export const TASKBAR_HEIGHT = 30;
@@ -181,6 +183,21 @@ export class WindowManagerService {
     const area = this.desktopSize();
     win.w.set(Math.min(Math.max(w, MIN_W), area.width - win.x()));
     win.h.set(Math.min(Math.max(h, MIN_H), area.height - win.y()));
+  }
+
+  /** Fits a window to its content — Minesweeper grows with the board. */
+  sizeToContent(id: WindowId, width: number, height: number): void {
+    const win = this.windows().find((w) => w.id === id);
+    if (!win || win.maximized()) return;
+
+    const area = this.desktopSize();
+    const w = Math.max(Math.min(width, area.width), MIN_W);
+    const h = Math.max(Math.min(height, area.height), MIN_H);
+    // Pull it back on screen first, or the clamp in resizeTo would eat the growth.
+    if (win.x() + w > area.width) win.x.set(Math.max(0, area.width - w));
+    if (win.y() + h > area.height) win.y.set(Math.max(0, area.height - h));
+    win.w.set(w);
+    win.h.set(h);
   }
 
   desktopSize(): { width: number; height: number } {
